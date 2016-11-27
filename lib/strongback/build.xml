@@ -6,16 +6,17 @@
     <property name="test.output.dir" value="tests" />
     <property name="test.report.dir" value="${test.output.dir}/classes" />
     <property name="test.target.dir" value="${test.output.dir}/classes" />
-    <property file="${lib}/wpilib/wpilib.properties" />
-    <property file="${lib}/wpilib/build.properties" />
-    <property file="${lib}/strongback/build.properties" />
+    <property file="${lib}/strongback/build.properties" />	
+	<import file="../wpilib/build.xml" />
 	
-    <import file="../wpilib/build.xml" />
+
+	
+    
 	
     <!-- Define the classpaths -->
     <path id="compile.classpath">
         <fileset dir="${strongback.lib}" includes="**/*.jar" excludes="**/*-sources.jar" />
-        <fileset dir="${lib}/wpilib/lib" includes="**/*.jar" excludes="**/*-sources.jar" />
+        <fileset dir="${wpilib.lib}" includes="**/*.jar" excludes="**/*-sources.jar" />
         <pathelement path="${classpath}" />
     </path>
 
@@ -59,7 +60,7 @@
         <echo>Copying jars from ${strongback.classpath} to ${build.jars}.</echo>
         <copy todir="${build.jars}" flatten="true">
             <path>
-                <pathelement path="${strongback.classpath}" />
+                <pathelement path="${classpath}" />
             </path>
         </copy>
 
