@@ -25,6 +25,10 @@ public class DoorPneumatic extends Subsystem {
 		solenoid.set(false);
 	}
 	
+	public boolean value(){
+		return solenoid.get();
+	}
+	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
