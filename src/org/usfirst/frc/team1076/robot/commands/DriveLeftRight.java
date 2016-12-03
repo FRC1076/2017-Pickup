@@ -4,9 +4,7 @@ import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
+
 public class DriveLeftRight extends Command {
 
 	FrontBackMotors frontBack;
@@ -34,10 +32,7 @@ public class DriveLeftRight extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		if (time == targetTime) {
-			return true;
-		} 
-		return false; 
+		return time >= targetTime;
 	}
 
 	// Called once after isFinished returns true
