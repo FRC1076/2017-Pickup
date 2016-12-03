@@ -6,7 +6,7 @@ import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * command for driving forwards or backwards
+ * This is a command for driving forwards or backwards.
  * 
  * @author Ella
  *
@@ -25,7 +25,7 @@ public class DriveForwardBackward extends Command {
 	 * @param targetTime
 	 *            measured in seconds.
 	 * @param speed
-	 *            is in the range of -1 to 1.
+	 *            is in the range of -1 to 1 (positive is forwards).
 	 */
 	public DriveForwardBackward(LeftRightMotors leftRight, double targetTime, double speed) {
 		this.leftRight = leftRight;
@@ -40,16 +40,12 @@ public class DriveForwardBackward extends Command {
 
 	protected void execute() {
 		leftRight.setSpeed(speed);
-		time = time + 1.0 / 50.0;
+		time += 1/50.0;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		if (time == targetTime) {
-			return true;
-		} else {
-			return false;
-		}
+		return time >= targetTime;
 	}
 
 	// Called once after isFinished returns true
