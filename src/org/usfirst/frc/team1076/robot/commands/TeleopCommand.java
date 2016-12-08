@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1076.robot.commands;
 
 import org.usfirst.frc.team1076.robot.Gamepad;
+import org.usfirst.frc.team1076.robot.Gamepad.GamepadAxis;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 
@@ -31,9 +32,12 @@ public class TeleopCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	// Strafing
+    	double x = gamepad.getAxis(GamepadAxis.LeftX);
+    	double y = gamepad.getAxis(GamepadAxis.LeftY);
+    	frontBack.setSpeed(x);
+    	leftRight.setSpeed(y);
     	
     	// Rotation
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -48,5 +52,6 @@ public class TeleopCommand extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

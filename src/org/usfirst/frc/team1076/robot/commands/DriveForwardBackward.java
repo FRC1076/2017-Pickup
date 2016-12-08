@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1076.robot.commands;
 
-import org.usfirst.frc.team1076.robot.Robot;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 
 import edu.wpi.first.wpilibj.command.Command;
