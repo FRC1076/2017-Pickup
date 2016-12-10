@@ -34,10 +34,8 @@ public class TeleopCommand extends Command {
     protected void execute() {
     	final double x = gamepad.getAxis(GamepadAxis.LeftX);
     	final double y = gamepad.getAxis(GamepadAxis.LeftY);
-    	
-    	// We negate this since we want right (which is positive) to be a
-    	// clockwise rotation, and negative numbers are clockwise angles.
-    	final double rot = -gamepad.getAxis(GamepadAxis.RightX);
+    	// Counterclockwise ends up positive.
+    	final double rot = gamepad.getAxis(GamepadAxis.RightX);
     	
     	// The robot wheel centers are 14.5" apart for the front and back,
     	// and 23" apart for the left and right.
@@ -46,7 +44,7 @@ public class TeleopCommand extends Command {
     	// move at a speed proportional to their radius.
     	final double radiusScale = 14.5 / 23;
 
-    	// If rot is a positive angle, we want the following modification:
+    	// To rotate counterclockwise, we want the following modification:
     	//   <
     	// v   ^
     	//   >
