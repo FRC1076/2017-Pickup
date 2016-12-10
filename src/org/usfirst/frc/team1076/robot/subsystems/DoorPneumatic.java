@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1076.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -9,11 +8,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DoorPneumatic extends Subsystem {
     
-	Compressor compressor;
 	Solenoid solenoid;
 	
-	public DoorPneumatic(Compressor compressor, Solenoid solenoid){
-		this.compressor = compressor;
+	public DoorPneumatic(Solenoid solenoid){
 		this.solenoid = solenoid;
 	}
 	public void open() {
