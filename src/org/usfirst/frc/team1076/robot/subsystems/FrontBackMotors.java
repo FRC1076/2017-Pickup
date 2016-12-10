@@ -35,7 +35,8 @@ public class FrontBackMotors extends Subsystem {
 	 * @param speed a number in the range -1 to 1 inclusive.
 	 */
 	public void setBackSpeed(double speed) {
-		this.backMotor.set(speed);
+		// Negative since the motor is reversed
+		this.backMotor.set(-speed);
 	}
 
 	/**

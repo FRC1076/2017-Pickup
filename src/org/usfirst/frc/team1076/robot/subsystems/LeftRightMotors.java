@@ -36,7 +36,8 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setRightSpeed(double speed) {
-		this.rightMotor.set(speed);
+		// This motor is backwards
+		this.rightMotor.set(-speed);
 	}
 	
 	/**

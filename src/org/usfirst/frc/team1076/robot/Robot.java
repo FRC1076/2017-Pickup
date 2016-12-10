@@ -1,12 +1,17 @@
 
 package org.usfirst.frc.team1076.robot;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.usfirst.frc.team1076.robot.commands.ExampleCommand;
+import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
+import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,7 +25,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static OI oi;
+	Gamepad gamepad = new Gamepad(0);
+	CANTalon leftMotor = new CANTalon(2);
+	CANTalon rightMotor = new CANTalon(0);
+	CANTalon frontMotor = new CANTalon(3);
+	CANTalon backMotor = new CANTalon(1);
+	LeftRightMotors leftRight = new LeftRightMotors(leftMotor, rightMotor);
+	FrontBackMotors frontBack = new FrontBackMotors(frontMotor, backMotor);
+	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -30,7 +42,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-		oi = new OI();
+		gamepad = new Gamepad(0);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ExampleCommand());
 //        chooser.addObject("My Auto", new MyAutoCommand());
@@ -90,6 +102,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        teleopCommand.start();
     }
 
     /**
