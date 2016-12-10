@@ -4,18 +4,17 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-/**This subsystem /controls the door.
- *
+/**
+ * This subsystem /controls the door.
  */
 public class DoorPneumatic extends Subsystem {
     
 	Compressor compressor;
 	Solenoid solenoid;
+	
 	public DoorPneumatic(Compressor compressor, Solenoid solenoid){
 		this.compressor = compressor;
 		this.solenoid = solenoid;
-		
-		
 	}
 	public void open() {
 		solenoid.set(true);

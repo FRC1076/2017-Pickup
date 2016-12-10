@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Controls whether or not to open or close the door.
  */
 public class DoorMovement extends Command {
 
@@ -17,8 +17,6 @@ public class DoorMovement extends Command {
     	this.doormovement = doormovement;
         requires(doormovement);
         this.isFinished = false;
-        
-        
     }
 
     // Called just before this Command runs the first time
@@ -33,9 +31,7 @@ public class DoorMovement extends Command {
     		doormovement.open();
     	}
     	this.isFinished = true;
- 
     }
-    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return isFinished;
@@ -48,5 +44,6 @@ public class DoorMovement extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        end();
     }
 }
