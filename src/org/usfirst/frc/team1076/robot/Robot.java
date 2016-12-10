@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
+import org.usfirst.frc.team1076.robot.commands.DriveForwardBackward;
 import org.usfirst.frc.team1076.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.ExampleSubsystem;
@@ -47,6 +49,9 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", new ExampleCommand());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putNumber("Speed", 0.5);
+        SmartDashboard.putNumber("Time", 4);
+        SmartDashboard.putNumber("Left Factor", 1);
     }
 	
 	/**
@@ -54,7 +59,7 @@ public class Robot extends IterativeRobot {
      * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
      */
-    public void disabledInit(){
+    public void disabledInit() {
 
     }
 	
@@ -72,7 +77,10 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-        autonomousCommand = (Command) chooser.getSelected();
+    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
+        autonomousCommand = new DriveForwardBackward(leftRight,
+        		SmartDashboard.getNumber("Time", 2),
+        		SmartDashboard.getNumber("Speed", 0.5));
         
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {

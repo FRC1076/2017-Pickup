@@ -61,10 +61,10 @@ public class TeleopCommand extends Command {
     	// is 0.5, then we'll get 2.0 and divide by 2.0.
     	final double norm = selectMaxAbs(new double[] {1/maxSpeed, front, back, left, right});
     	
-    	frontBack.setFrontSpeed(front / norm);
-    	frontBack.setBackSpeed(back / norm);
-    	leftRight.setLeftSpeed(left / norm);
-    	leftRight.setRightSpeed(right / norm);
+    	frontBack.setFrontSpeed(-front / norm);
+    	frontBack.setBackSpeed(-back / norm);
+    	leftRight.setLeftSpeed(-left / norm);
+    	leftRight.setRightSpeed(-right / norm);
     }
     
     private double selectMaxAbs(double[] items) {
