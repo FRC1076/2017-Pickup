@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TeleopCommand extends Command {
 
+	double maxSpeed = 0.5;
 	FrontBackMotors frontBack;
 	LeftRightMotors leftRight;
 	Gamepad gamepad;
@@ -57,8 +58,10 @@ public class TeleopCommand extends Command {
     	final double right = y + rot;
     	
     	// We don't want any motor to run faster than unit speed, so if anything
-    	// is larger than 1 we'll scale then down.
-    	final double norm = selectMaxAbs(new double[] {1.0, front, back, left, right});
+    	// is larger than the max speed we'll scale them down.
+    	// We use the reciprocal of the max speed so that if for example maxSpeed
+    	// is 0.5, then we'll get 2.0 and divide by 2.0.
+    	final double norm = selectMaxAbs(new double[] {1/maxSpeed, front, back, left, right});
     	
     	frontBack.setFrontSpeed(front / norm);
     	frontBack.setBackSpeed(back / norm);
