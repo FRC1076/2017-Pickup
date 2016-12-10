@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
-    Compressor compressor = new Compressor();
+    Compressor compressor = new Compressor(0);
     DoorPneumatic door;
     
     /**

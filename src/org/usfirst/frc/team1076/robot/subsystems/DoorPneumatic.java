@@ -10,18 +10,18 @@ public class DoorPneumatic extends Subsystem {
     
 	Solenoid solenoid;
 	
-	public DoorPneumatic(Solenoid solenoid){
+	public DoorPneumatic(Solenoid solenoid) {
 		this.solenoid = solenoid;
 	}
 	public void open() {
 		solenoid.set(true);
 	}
 	
-	public void close(){
+	public void close() {
 		solenoid.set(false);
 	}
 	
-	public boolean value(){
+	public boolean value() {
 		return solenoid.get();
 	}
 	

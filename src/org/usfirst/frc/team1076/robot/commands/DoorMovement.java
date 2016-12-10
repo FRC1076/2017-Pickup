@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DoorMovement extends Command {
 
-	DoorPneumatic doormovement; 
+	DoorPneumatic doorPiston; 
 	boolean isFinished; 
 	
     public DoorMovement(DoorPneumatic doormovement) {
-    	this.doormovement = doormovement;
+    	this.doorPiston = doormovement;
         requires(doormovement);
         this.isFinished = false;
     }
@@ -25,10 +25,10 @@ public class DoorMovement extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (doormovement.value() == true) {
-    	doormovement.close();
+    	if (doorPiston.value() == true) {
+    	doorPiston.close();
     	} else {
-    		doormovement.open();
+    		doorPiston.open();
     	}
     	this.isFinished = true;
     }
