@@ -2,14 +2,21 @@
 package org.usfirst.frc.team1076.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
+import org.usfirst.frc.team1076.robot.commands.DriveForwardBackward;
 import org.usfirst.frc.team1076.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
+import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
+import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,7 +30,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static OI oi;
+	Gamepad gamepad = new Gamepad(0);
+	CANTalon leftMotor = new CANTalon(2);
+	CANTalon rightMotor = new CANTalon(0);
+	CANTalon frontMotor = new CANTalon(3);
+	CANTalon backMotor = new CANTalon(1);
+	LeftRightMotors leftRight = new LeftRightMotors(leftMotor, rightMotor);
+	FrontBackMotors frontBack = new FrontBackMotors(frontMotor, backMotor);
+	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -37,11 +51,15 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         door = new DoorPneumatic(new Solenoid(0));
 		oi = new OI(door);
+		gamepad = new Gamepad(0);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ExampleCommand());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
         compressor.start();
+        SmartDashboard.putNumber("Speed", 0.5);
+        SmartDashboard.putNumber("Time", 4);
+        SmartDashboard.putNumber("Left Factor", 1);
     }
 	
 	/**
@@ -49,7 +67,7 @@ public class Robot extends IterativeRobot {
      * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
      */
-    public void disabledInit(){
+    public void disabledInit() {
 
     }
 	
@@ -67,7 +85,10 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-        autonomousCommand = (Command) chooser.getSelected();
+    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
+        autonomousCommand = new DriveForwardBackward(leftRight,
+        		SmartDashboard.getNumber("Time", 2),
+        		SmartDashboard.getNumber("Speed", 0.5));
         
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
@@ -97,6 +118,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        teleopCommand.start();
     }
 
     /**
