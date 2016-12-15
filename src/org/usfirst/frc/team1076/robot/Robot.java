@@ -1,14 +1,17 @@
 
 package org.usfirst.frc.team1076.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import org.usfirst.frc.team1076.robot.commands.DriveForwardBackward;
 import org.usfirst.frc.team1076.robot.commands.ExampleCommand;
+import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
@@ -38,17 +41,22 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand;
     SendableChooser chooser;
-
+    Compressor compressor = new Compressor(0);
+    DoorPneumatic door;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
+        door = new DoorPneumatic(new Solenoid(0));
+		oi = new OI(door);
 		gamepad = new Gamepad(0);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ExampleCommand());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
+        compressor.start();
         SmartDashboard.putNumber("Speed", 0.5);
         SmartDashboard.putNumber("Time", 4);
         SmartDashboard.putNumber("Left Factor", 1);
