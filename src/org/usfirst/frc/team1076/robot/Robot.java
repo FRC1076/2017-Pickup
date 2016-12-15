@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static OI oi;
 	Gamepad gamepad = new Gamepad(0);
 	CANTalon leftMotor = new CANTalon(2);
 	CANTalon rightMotor = new CANTalon(0);
