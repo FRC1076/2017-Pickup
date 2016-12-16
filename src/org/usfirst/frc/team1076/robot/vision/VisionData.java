@@ -22,6 +22,14 @@ public class VisionData {
      */
     public VisionData(JSONObject json) {
         try {
+        	// We didn't get a vision packet, so we can't really do anything with it
+        	if (!json.get("sender").equals("vision")) {
+                status = VisionStatus.ERROR;
+                heading = 0;
+                range = 0;
+                return;
+        	}
+        	
             switch (json.getString("status")) {
             case "left":
                 status = VisionStatus.LEFT;
