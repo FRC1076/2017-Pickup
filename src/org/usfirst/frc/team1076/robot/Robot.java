@@ -11,14 +11,15 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.SocketException;
 
-import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
+import org.usfirst.frc.team1076.robot.commands.AutoCommandGroup;
+import org.usfirst.frc.team1076.robot.commands.CancelCommand;
+import org.usfirst.frc.team1076.robot.commands.SonarTrigger;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -41,13 +42,15 @@ public class Robot extends IterativeRobot {
 	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
 
     Command autonomousCommand;
-    SendableChooser chooser;
     Compressor compressor = new Compressor(0);
     DoorPneumatic door;
-    VisionReceiver receiver;
+    VisionReceiver visionReceiver;
+    SonarReceiver sonarReceiver;
+    SonarTrigger sonarTrigger;
 
     public static final String IP = "0.0.0.0";
     public static final int VISION_PORT = 5880;
+    public static final int SONAR_PORT = 5881;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -57,17 +60,15 @@ public class Robot extends IterativeRobot {
         door = new DoorPneumatic(new Solenoid(0));
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
-        chooser = new SendableChooser();
-//        chooser.addObject("My Auto", new MyAutoCommand());
-        SmartDashboard.putData("Auto mode", chooser);
         compressor.start();
         SmartDashboard.putNumber("Speed", 0.5);
-        SmartDashboard.putNumber("Time", 4);
+        SmartDashboard.putNumber("Time", 2);
         SmartDashboard.putNumber("Left Factor", 1);
-        SmartDashboard.putNumber("Vision Time Factor", 1);
+        SmartDashboard.putNumber("Time Factor", 1);
         
         try {
-            receiver = new VisionReceiver(IP, VISION_PORT);
+            visionReceiver = new VisionReceiver(IP, VISION_PORT);
+            sonarReceiver = new SonarReceiver(IP, SONAR_PORT);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -97,13 +98,14 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
-    	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, receiver);
-    	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
-    	autonomousCommand = rotate;
-//        autonomousCommand = new DriveForwardBackward(leftRight,
-//        		SmartDashboard.getNumber("Time", 2),
-//        		SmartDashboard.getNumber("Speed", 0.5));
-        
+    	double speed = SmartDashboard.getNumber("Speed", 0.5);
+    	double time = SmartDashboard.getNumber("Time", 2);
+    	double turnFactor = SmartDashboard.getNumber("Time Factor", 1);
+    	autonomousCommand = new AutoCommandGroup(frontBack, leftRight, visionReceiver,
+    			speed, time, turnFactor);
+    	CancelCommand cancel = new CancelCommand(new Command[] { autonomousCommand });
+    	sonarTrigger = new SonarTrigger(10, sonarReceiver, cancel);
+    	sonarTrigger.start();
         
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
@@ -134,6 +136,7 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
         teleopCommand.start();
+        sonarTrigger.cancel();
     }
 
     /**
