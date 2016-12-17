@@ -12,49 +12,67 @@ public class VisionData {
         LEFT, RIGHT, OK, ERROR
     }
 
-    int heading;
-    double range;
-    VisionStatus status;
-
+    int heading = 0;
+    double range = 0.0;
+    VisionStatus status = VisionStatus.ERROR;
+    int errorCount = 0;
+    
+    public VisionData() {  }
+    
     /**
      * Extracts data from a JSONObject. This object must have
      * the keys "status", "heading", and "range".  
      */
+    
     public VisionData(JSONObject json) {
-        try {
-        	// We didn't get a vision packet, so we can't really do anything with it
-        	if (!json.get("sender").equals("vision")) {
-                status = VisionStatus.ERROR;
-                heading = 0;
-                range = 0;
-                return;
-        	}
-        	
-            switch (json.getString("status")) {
-            case "left":
-                status = VisionStatus.LEFT;
-            case "right":
-                status = VisionStatus.RIGHT;
-            case "ok":
-                status = VisionStatus.OK;
-            case "error":
-            default:
-                status = VisionStatus.ERROR;
-            }
-            heading = json.getInt("heading");
-            range = json.getDouble("range");
-        } catch (JSONException e) { // Malformed JSON packet, assume no useful data
-            status = VisionStatus.ERROR;
-            heading = 0;
-            range = 0;
-        }
+       update(json);
     }
     
     /**
      * Extracts data from a string formated like a JSON blob.
      */
     public VisionData(String json) {
-    	this(new JSONObject(new JSONTokener(json)));
+        this();
+        try {
+    	    update(new JSONObject(new JSONTokener(json)));
+        } catch (JSONException e) {
+        }
+    }
+    
+    public void update(JSONObject json) {
+        try {
+            // We didn't get a vision packet, so we can't really do anything with it
+            if (!json.getString("sender").equals("vision")) {
+                return;
+            }
+            
+            switch (json.getString("status")) {
+            case "left":
+                status = VisionStatus.LEFT;
+                errorCount = 0;
+                break;
+            case "right":
+                status = VisionStatus.RIGHT;
+                errorCount = 0;
+                break;
+            case "ok":
+                status = VisionStatus.OK;
+                errorCount = 0;
+                break;
+            case "error":
+            default:
+                status = VisionStatus.ERROR;
+                errorCount += 1;
+            }
+            heading = json.getInt("heading");
+            range = json.getDouble("range");
+        } catch (JSONException e) { 
+            // Malformed JSON packet, assume no useful data
+        }
+    }
+    
+    public void update(String json) {
+        update(new JSONObject(new JSONTokener(json)));
     }
     
     /** 
@@ -80,5 +98,13 @@ public class VisionData {
      */
     public VisionStatus getStatus() {
         return status;
+    }
+    
+    /**
+     * Get number of packets since last good packet received.
+     * @return
+     */
+    public int getErrorCount() {
+        return errorCount;
     }
 }

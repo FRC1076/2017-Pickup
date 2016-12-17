@@ -20,6 +20,7 @@ public class VisionReceiver {
 		socket = new DatagramSocket(null);
 		InetSocketAddress address = new InetSocketAddress(ip, port);
 		socket.bind(address);
+		data = new VisionData();
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class VisionReceiver {
 	            }
 	            
 	            String json = new String(packet.getData()).substring(0, packet.getLength());
-	            this.data = new VisionData(json);
+	            this.data.update(json);
 	        }
 	}
 	

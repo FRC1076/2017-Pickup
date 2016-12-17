@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import java.net.SocketException;
+
 import org.usfirst.frc.team1076.robot.commands.DriveForwardBackward;
 import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
@@ -67,7 +69,7 @@ public class Robot extends IterativeRobot {
         
         try {
             receiver = new VisionReceiver(IP, VISION_PORT);
-        } catch (Exception e) {
+        } catch (SocketException e) {
             e.printStackTrace();
         }
     }
