@@ -2,7 +2,7 @@ package org.usfirst.frc.team1076.robot.commands;
 
 import java.io.IOException;
 
-import org.usfirst.frc.team1076.robot.SonarReciever;
+import org.usfirst.frc.team1076.robot.SonarReceiver;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -15,12 +15,12 @@ public class SonarTrigger extends CommandGroup {
 
 	
 	int threshold;
-	SonarReciever sonar;
+	SonarReceiver sonar;
 	Command command;
 	boolean shouldFinish;
 	
 	
-    public SonarTrigger(int threshold, SonarReciever sonar, Command command) {
+    public SonarTrigger(int threshold, SonarReceiver sonar, Command command) {
     	this.threshold = threshold;
     	this.sonar = sonar;
     	this.command = command;
@@ -34,7 +34,7 @@ public class SonarTrigger extends CommandGroup {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	try {
-			sonar.recieve();
+			sonar.receive();
 			if (sonar.distance() <= threshold){
 	    		addSequential(command);
 	    		shouldFinish = true;
