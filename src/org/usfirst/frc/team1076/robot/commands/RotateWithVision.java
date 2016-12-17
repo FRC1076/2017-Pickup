@@ -6,6 +6,7 @@ import java.net.SocketException;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
+import org.usfirst.frc.team1076.robot.vision.VisionData.VisionStatus;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -32,24 +33,26 @@ public class RotateWithVision extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	try {
-			receiver.receive();
-		} catch (IOException e) {
-			// TODO: Figure out something reasonable here.
-			e.printStackTrace();
-		}
+        receiver.receive();
     	
     	double heading = receiver.getData().getHeading();
+    	VisionStatus status = receiver.getData().getStatus();
     	double speed = 1;
     	double time = heading * timeFactor;
-
+    	
+    	this.cancel();
+    	
+    	if (status.equals(VisionStatus.ERROR)) {
+    	    return;
+    	}
+    	
     	if (heading > 0) {
     	    new RotateCommand(leftRight, frontBack, time, speed).start();
     	} else if (heading < 0) {
     	    new RotateCommand(leftRight, frontBack, time, -speed).start();
     	}
     	
-    	this.cancel();
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
