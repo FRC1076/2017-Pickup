@@ -10,22 +10,20 @@ import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command rotates towards the goal.
  */
-public class DriveWithVision extends Command {
-
+public class RotateWithVision extends Command {
+    public static double timeFactor = 1;
+    
 	VisionReceiver receiver;
 	FrontBackMotors frontBack;
 	LeftRightMotors leftRight;
-    public DriveWithVision() {
+    public RotateWithVision(FrontBackMotors frontBack, LeftRightMotors leftRight, VisionReceiver receiver) {
     	requires(frontBack);
     	requires(leftRight);
-    	try {
-			receiver = new VisionReceiver("10.10.76.2", 0); // TODO find the actual values for this
-		} catch (SocketException e) {
-			// TODO: This command should probably just stop if something errorful happens
-			e.printStackTrace();
-		} 
+    	this.frontBack = frontBack;
+    	this.leftRight = leftRight;
+    	this.receiver = receiver;
     }
 
     // Called just before this Command runs the first time
@@ -42,26 +40,32 @@ public class DriveWithVision extends Command {
 		}
     	
     	double heading = receiver.getData().getHeading();
-    	double range = receiver.getData().getRange();
-    	double speed; // TODO: What equation should this use?
-    	frontBack.setSpeed(1);
-    	leftRight.setLeftSpeed(speed);
-    	leftRight.setRightSpeed(-speed);
+    	double speed = 1;
+    	double time = heading * timeFactor;
+
+    	if (heading > 0) {
+    	    new RotateCommand(leftRight, frontBack, time, speed).start();
+    	} else if (heading < 0) {
+    	    new RotateCommand(leftRight, frontBack, time, -speed).start();
+    	}
+    	
+    	this.cancel();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return dothisbeforemerging;
+        return false; // TODO: When does this command actually finish?
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	dothisbeforemerging
+    	leftRight.stop();
+    	frontBack.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	dothisbeforemerging
+    	end();
     }
 }
