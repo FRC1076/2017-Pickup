@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class LeftRightMotors extends Subsystem {
     
+	public double leftFactor = 1.0;
 	SpeedController leftMotor;
 	SpeedController rightMotor;
 	
@@ -20,7 +21,7 @@ public class LeftRightMotors extends Subsystem {
 	 */
 	public LeftRightMotors(SpeedController leftMotor, SpeedController rightMotor) {
 		this.leftMotor = leftMotor;
-		this.rightMotor = rightMotor;		
+		this.rightMotor = rightMotor;
 	}
 
 	/**
@@ -28,7 +29,8 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setLeftSpeed(double speed) {
-		this.leftMotor.set(speed);
+		// This motor is backwards
+		this.leftMotor.set(-speed * leftFactor);
 	}
 
 	/**
@@ -36,8 +38,7 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setRightSpeed(double speed) {
-		// This motor is backwards
-		this.rightMotor.set(-speed);
+		this.rightMotor.set(speed);
 	}
 	
 	/**
