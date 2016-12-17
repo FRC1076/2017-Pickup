@@ -25,20 +25,23 @@ public class SonarReceiver {
 		byte[] buffer = new byte[512];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		socket.setSoTimeout(1);
-		try {
-		    socket.receive(packet);
-        } catch (SocketTimeoutException e) {
-            return;
-            // Can't do anything without good data.
-        }
-
-		try {
-		    String json = new String(packet.getData()).substring(0, packet.getLength());
-		    JSONTokener tokener = new JSONTokener(json);
-		    JSONObject data = new JSONObject(tokener);
-		    sonarDistance = data.getInt("left front");
-		} catch (JSONException e) {
-		    e.printStackTrace();
+		
+    	while (true) {
+    		try {
+    		    socket.receive(packet);
+            } catch (SocketTimeoutException e) {
+                // Exit once we have received all the packets.
+                return;
+            }
+    
+    		try {
+    		    String json = new String(packet.getData()).substring(0, packet.getLength());
+    		    JSONTokener tokener = new JSONTokener(json);
+    		    JSONObject data = new JSONObject(tokener);
+    		    sonarDistance = data.getInt("left front");
+    		} catch (JSONException e) {
+    		    e.printStackTrace();
+    		}
 		}
 	}
 
