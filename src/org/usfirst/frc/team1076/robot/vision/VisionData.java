@@ -17,13 +17,12 @@ public class VisionData {
     VisionStatus status = VisionStatus.ERROR;
     int errorCount = 0;
     
-    public VisionData() {  }
+    public VisionData() { }
     
     /**
      * Extracts data from a JSONObject. This object must have
      * the keys "status", "heading", and "range".  
      */
-    
     public VisionData(JSONObject json) {
        update(json);
     }
@@ -32,7 +31,6 @@ public class VisionData {
      * Extracts data from a string formated like a JSON blob.
      */
     public VisionData(String json) {
-        this();
         try {
     	    update(new JSONObject(new JSONTokener(json)));
         } catch (JSONException e) {
@@ -72,7 +70,10 @@ public class VisionData {
     }
     
     public void update(String json) {
-        update(new JSONObject(new JSONTokener(json)));
+    	try {
+    		update(new JSONObject(new JSONTokener(json)));
+    	} catch (JSONException e) {
+    	}
     }
     
     /** 
