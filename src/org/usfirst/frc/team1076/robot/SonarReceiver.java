@@ -21,10 +21,15 @@ public class SonarReceiver {
 		socket.bind(address);
 	}
 
-	public void receive() throws IOException {
+	public void receive() {
 		byte[] buffer = new byte[512];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-		socket.setSoTimeout(1);
+		try {
+			socket.setSoTimeout(1);
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+			return;
+		}
 		
     	while (true) {
     		try {
@@ -32,7 +37,10 @@ public class SonarReceiver {
             } catch (SocketTimeoutException e) {
                 // Exit once we have received all the packets.
                 return;
-            }
+            } catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
     
     		try {
     		    String json = new String(packet.getData()).substring(0, packet.getLength());
