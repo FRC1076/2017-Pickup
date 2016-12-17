@@ -5,6 +5,8 @@
 
 # Package Files #
 *.jar
+!json.jar
+!json-sources.jar
 *.war
 *.ear
 
