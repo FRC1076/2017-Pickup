@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * This command rotates towards the goal.
  */
 public class RotateWithVision extends Command {
-    public static double timeFactor = 1;
+    public double timeFactor = 1;
     
 	VisionReceiver receiver;
 	FrontBackMotors frontBack;

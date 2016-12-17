@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import org.usfirst.frc.team1076.robot.commands.DriveForwardBackward;
+import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
+import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +43,10 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     Compressor compressor = new Compressor(0);
     DoorPneumatic door;
+    VisionReceiver receiver;
+
+    public static final String IP = "0.0.0.0";
+    public static final int VISION_PORT = 5880;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -57,6 +63,13 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Speed", 0.5);
         SmartDashboard.putNumber("Time", 4);
         SmartDashboard.putNumber("Left Factor", 1);
+        SmartDashboard.putNumber("Vision Time Factor", 1);
+        
+        try {
+            receiver = new VisionReceiver(IP, VISION_PORT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 	
 	/**
@@ -83,9 +96,13 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
-        autonomousCommand = new DriveForwardBackward(leftRight,
-        		SmartDashboard.getNumber("Time", 2),
-        		SmartDashboard.getNumber("Speed", 0.5));
+    	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, receiver);
+    	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
+    	autonomousCommand = rotate;
+//        autonomousCommand = new DriveForwardBackward(leftRight,
+//        		SmartDashboard.getNumber("Time", 2),
+//        		SmartDashboard.getNumber("Speed", 0.5));
+        
         
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
