@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * This class reads from an IP address and port 
@@ -25,10 +26,20 @@ public class VisionReceiver {
 	 * Receives and processes a vision packet.
 	 */
 	public void receive() throws IOException {
-		byte[] buffer = new byte[512];
-		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-		socket.receive(packet);
-		data = new VisionData(new String(packet.getData()));
+	      byte[] buffer = new byte[512];
+	        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+	        socket.setSoTimeout(1);
+	        
+	        while (true) {
+	            try {
+	                socket.receive(packet);
+	            } catch (SocketTimeoutException e) {
+	                // Exit once we have received all the packets.
+	                return;
+	            }
+	            String json = new String(packet.getData()).substring(0, packet.getLength());
+	            this.data = new VisionData(json);
+	        }
 	}
 	
 	/**
