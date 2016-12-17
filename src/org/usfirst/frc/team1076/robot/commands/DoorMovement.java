@@ -2,7 +2,6 @@ package org.usfirst.frc.team1076.robot.commands;
 
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
