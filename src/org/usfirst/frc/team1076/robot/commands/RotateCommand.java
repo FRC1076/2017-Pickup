@@ -39,16 +39,22 @@ public class RotateCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	time +=1/50.0;
-    	frontBack.setFrontSpeed(speed);
-    	frontBack.setBackSpeed(-speed);
-    	leftRight.setLeftSpeed(speed);
-    	leftRight.setRightSpeed(-speed);
+    	time += 1/50.0;
+    	
+    	final double width = 23;
+    	final double height = 14.5;
+    	final double frontBackSpeed = height / width;
+    	final double leftRightSpeed = 1;
+    	
+    	frontBack.setFrontSpeed(speed * frontBackSpeed);
+    	frontBack.setBackSpeed(-speed * frontBackSpeed);
+    	leftRight.setLeftSpeed(speed * leftRightSpeed);
+    	leftRight.setRightSpeed(-speed * leftRightSpeed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return time >= targetTime;
     }
 
     // Called once after isFinished returns true
