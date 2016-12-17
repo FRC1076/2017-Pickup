@@ -11,13 +11,11 @@ import org.json.JSONTokener;
 
 public class SonarReciever {
 	DatagramSocket socket;
-	int left;
-	int right;
+	int sonarDistance;
 
-	public SonarReciever() throws SocketException {
-
+	public SonarReciever(String ip, int portNumber) throws SocketException {
 		socket = new DatagramSocket(null);
-		InetSocketAddress address = new InetSocketAddress("10.10.76.2", 4243);
+		InetSocketAddress address = new InetSocketAddress(ip, portNumber);
 		socket.bind(address);
 	}
 
@@ -28,18 +26,12 @@ public class SonarReciever {
 		socket.receive(packet);
 		JSONTokener tokener = new JSONTokener(new String(packet.getData()));
 		JSONObject data = new JSONObject(tokener);
-		left = data.getInt("left front");
-		right = data.getInt("right front");
+		sonarDistance = data.getInt("left front");
 
 	}
 
-	public int getLeft() {
-		return left;
-	}
-
-	public int getRight() {
-		return right;
-
+	public int distance() {
+		return sonarDistance;
 	}
 
 }
