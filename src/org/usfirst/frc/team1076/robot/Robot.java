@@ -30,6 +30,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	final double DRIVE_SPEED_DEFAULT = 0.5;
+	final double DRIVE_TIME_DEFAULT = 2.0;
+	final double LEFT_FACTOR_DEFAULT = 0.98;
+	final double TIME_FACTOR_DEFAULT = 0.05;
+	final double TURN_SPEED_DEFAULT = 0.2;
+
+    public static final String IP = "0.0.0.0";
+    public static final int VISION_PORT = 5880;
+    public static final int SONAR_PORT = 5881;
 
 	public static OI oi;
 	Gamepad gamepad = new Gamepad(0);
@@ -40,17 +50,13 @@ public class Robot extends IterativeRobot {
 	LeftRightMotors leftRight = new LeftRightMotors(leftMotor, rightMotor);
 	FrontBackMotors frontBack = new FrontBackMotors(frontMotor, backMotor);
 	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
-
+    
     Command autonomousCommand;
     Compressor compressor = new Compressor(0);
     DoorPneumatic door;
     VisionReceiver visionReceiver;
     SonarReceiver sonarReceiver;
     SonarTrigger sonarTrigger;
-
-    public static final String IP = "0.0.0.0";
-    public static final int VISION_PORT = 5880;
-    public static final int SONAR_PORT = 5881;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -58,13 +64,15 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         door = new DoorPneumatic(new Solenoid(0));
+        System.out.println(door);
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
         compressor.start();
-        SmartDashboard.putNumber("Speed", 0.5);
-        SmartDashboard.putNumber("Time", 2);
-        SmartDashboard.putNumber("Left Factor", 1);
-        SmartDashboard.putNumber("Time Factor", 1);
+        SmartDashboard.putNumber("Speed", DRIVE_SPEED_DEFAULT);
+        SmartDashboard.putNumber("Time", DRIVE_TIME_DEFAULT);
+        SmartDashboard.putNumber("Left Factor", LEFT_FACTOR_DEFAULT);
+        SmartDashboard.putNumber("Time Factor", TIME_FACTOR_DEFAULT);
+        SmartDashboard.putNumber("Turn Speed", TURN_SPEED_DEFAULT);
         
         try {
             visionReceiver = new VisionReceiver(IP, VISION_PORT);
@@ -97,16 +105,17 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
-    	double speed = SmartDashboard.getNumber("Speed", 0.5);
-    	double time = SmartDashboard.getNumber("Time", 2);
-    	double turnFactor = SmartDashboard.getNumber("Time Factor", 1);
+    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", LEFT_FACTOR_DEFAULT);
+    	double speed = SmartDashboard.getNumber("Speed", DRIVE_SPEED_DEFAULT);
+    	double time = SmartDashboard.getNumber("Time", DRIVE_TIME_DEFAULT);
+    	double turnFactor = SmartDashboard.getNumber("Time Factor", TIME_FACTOR_DEFAULT);
+    	double turnSpeed = SmartDashboard.getNumber("Turn Speed", TURN_SPEED_DEFAULT);
     	autonomousCommand = new AutoCommandGroup(frontBack, leftRight, visionReceiver,
-    			speed, time, turnFactor);
+    			speed, time, turnFactor, turnSpeed);
     	CancelCommand cancel = new CancelCommand(new Command[] { autonomousCommand });
     	sonarTrigger = new SonarTrigger(10, sonarReceiver, cancel);
     	sonarTrigger.start();
-        
+    	
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
 		case "My Auto":
@@ -134,9 +143,9 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) autonomousCommand.cancel();
+        if (autonomousCommand != null) { autonomousCommand.cancel(); }
+        if (sonarTrigger != null) {	sonarTrigger.cancel(); }
         teleopCommand.start();
-        sonarTrigger.cancel();
     }
 
     /**
@@ -150,6 +159,6 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-        LiveWindow.run();
+    	LiveWindow.run();
     }
 }
