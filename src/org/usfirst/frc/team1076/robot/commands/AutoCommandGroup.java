@@ -33,7 +33,7 @@ public class AutoCommandGroup extends CommandGroup {
     public AutoCommandGroup(FrontBackMotors frontBack, LeftRightMotors leftRight, VisionReceiver vision,
     		double speed, double time, double turnFactor, double turnSpeed) {
     	// This is inelegant, but this should be enough to run for the 15 seconds of autonomous.
-    	for (int i = 0; i < 6; ++i) {
+    	for (int i = 0; i < 10; ++i) {
         	DriveForwardBackward forward = new DriveForwardBackward(leftRight, time, speed);
         	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, vision);
         	rotate.timeFactor = turnFactor;

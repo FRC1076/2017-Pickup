@@ -32,9 +32,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	final double DRIVE_SPEED_DEFAULT = 0.5;
-	final double DRIVE_TIME_DEFAULT = 2.0;
+	final double DRIVE_TIME_DEFAULT = 1.0;
 	final double LEFT_FACTOR_DEFAULT = 0.98;
-	final double TIME_FACTOR_DEFAULT = 0.05;
+	final double TIME_FACTOR_DEFAULT = 0.04;
 	final double TURN_SPEED_DEFAULT = 0.2;
 
     public static final String IP = "0.0.0.0";
@@ -91,7 +91,16 @@ public class Robot extends IterativeRobot {
 
     }
 	
+    int dbgCounter = 0;
 	public void disabledPeriodic() {
+		if (dbgCounter++ % 50 == 0) {
+			visionReceiver.receive();
+			System.out.println(
+					"status: " + visionReceiver.getData().getStatus() +
+					", heading: " + visionReceiver.getData().getHeading() +
+					", range: " + visionReceiver.getData().getRange() +
+					", errors: " + visionReceiver.getData().getErrorCount());
+		}
 		Scheduler.getInstance().run();
 	}
 
