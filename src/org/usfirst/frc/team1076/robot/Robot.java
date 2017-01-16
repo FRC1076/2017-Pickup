@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.SocketException;
 
+import org.strongback.Strongback;
 import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
@@ -133,6 +134,8 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	Strongback.logger().info("I LIVE!");
+
         if (autonomousCommand != null) autonomousCommand.cancel();
         teleopCommand.start();
     }
