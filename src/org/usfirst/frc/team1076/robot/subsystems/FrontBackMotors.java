@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1076.robot.subsystems;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import org.strongback.components.SpeedController;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -28,7 +29,7 @@ public class FrontBackMotors extends Subsystem {
 	 */
 	public void setFrontSpeed(double speed) {
 		// Negative since the motor is reversed
-		this.frontMotor.set(-speed);
+		this.frontMotor.setSpeed(-speed);
 	}
 
 	/**
@@ -36,7 +37,7 @@ public class FrontBackMotors extends Subsystem {
 	 * @param speed a number in the range -1 to 1 inclusive.
 	 */
 	public void setBackSpeed(double speed) {
-		this.backMotor.set(speed);
+		this.backMotor.setSpeed(speed);
 	}
 
 	/**

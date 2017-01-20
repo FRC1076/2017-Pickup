@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import java.net.SocketException;
 
 import org.strongback.Strongback;
+import org.strongback.components.SpeedController;
+import org.strongback.hardware.Hardware;
 import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
 import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
-
-import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,10 +34,10 @@ public class Robot extends IterativeRobot {
 
 	public static OI oi;
 	Gamepad gamepad = new Gamepad(0);
-	CANTalon leftMotor = new CANTalon(2);
-	CANTalon rightMotor = new CANTalon(0);
-	CANTalon frontMotor = new CANTalon(3);
-	CANTalon backMotor = new CANTalon(1);
+	SpeedController leftMotor = Hardware.Motors.talon(2);
+	SpeedController rightMotor = Hardware.Motors.talon(0);
+	SpeedController frontMotor = Hardware.Motors.talon(3);
+	SpeedController backMotor = Hardware.Motors.talon(1);
 	LeftRightMotors leftRight = new LeftRightMotors(leftMotor, rightMotor);
 	FrontBackMotors frontBack = new FrontBackMotors(frontMotor, backMotor);
 	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
      */
     public void disabledInit() {
-
+        Strongback.stop();
     }
 	
 	public void disabledPeriodic() {
@@ -98,6 +98,8 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
+        Strongback.start();
+        
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
     	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
