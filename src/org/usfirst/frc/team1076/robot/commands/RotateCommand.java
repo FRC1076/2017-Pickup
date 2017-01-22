@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1076.robot.commands;
 
 import org.strongback.command.Command;
+import org.strongback.components.Motor;
 import org.strongback.drive.TankDrive;
 
 /**
@@ -20,9 +21,9 @@ public class RotateCommand extends Command {
 	 * @param targetTime measured in seconds.
 	 * @param speed in the range of -1 to 1. Positive numbers rotate clockwise, negative numbers rotate counterclockwise.
 	 */
-    public RotateCommand(TankDrive tank, double targetTime, double speed) {
-        super(tank);
-    	this.tank = tank;
+    public RotateCommand(Motor left, Motor right, double targetTime, double speed) {
+        super(left, right);
+    	this.tank = new TankDrive(left, right);
     	this.targetTime = targetTime;
     	this.speed = speed;
     }
