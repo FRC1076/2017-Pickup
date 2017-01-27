@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 	Motor right = Hardware.Motors.talonSRX(1);
 	LeftRightMotors leftRight = new LeftRightMotors(left, right);
 	TankDrive tank = new TankDrive(left, right);
-//	TeleopCommand teleopCommand = new TeleopCommand(gamepad, left, right);
+	TeleopCommand teleopCommand = new TeleopCommand(gamepad, leftRight);
     Command autonomousCommand;
     SendableChooser chooser;
     Compressor compressor = new Compressor(0);
@@ -140,14 +140,13 @@ public class Robot extends IterativeRobot {
     	Strongback.logger().info("I LIVE!");
 
         if (autonomousCommand != null) autonomousCommand.cancel();
-//        teleopCommand.start();
+        teleopCommand.start();
     }
 
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
-        tank.arcade(gamepad.getAxis(GamepadAxis.RightY), gamepad.getAxis(GamepadAxis.LeftX)); 
+    public void teleopPeriodic() { 
         Scheduler.getInstance().run();
     }
     
