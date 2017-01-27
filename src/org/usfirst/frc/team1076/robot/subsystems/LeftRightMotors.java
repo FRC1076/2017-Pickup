@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class LeftRightMotors extends Subsystem {
     
 	public double leftFactor = 1.0;
+	public double rightFactor = 1.0;
 	Motor leftMotor;
 	Motor rightMotor;
 	
@@ -38,7 +39,7 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setRightSpeed(double speed) {
-		this.rightMotor.setSpeed(speed);
+		this.rightMotor.setSpeed(speed * rightFactor);
 	}
 	
 	/**

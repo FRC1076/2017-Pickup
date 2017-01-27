@@ -66,6 +66,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Speed", 0.5);
         SmartDashboard.putNumber("Time", 4);
         SmartDashboard.putNumber("Left Factor", 1);
+        SmartDashboard.putNumber("Right Factor", 1);
         SmartDashboard.putNumber("Vision Time Factor", 1);
         
         try {
@@ -99,6 +100,7 @@ public class Robot extends IterativeRobot {
 	 */
     public void autonomousInit() {
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
+    	leftRight.rightFactor = SmartDashboard.getNumber("Right Factor", 1);
         Strongback.start();
     	RotateWithVision rotate = new RotateWithVision(leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
