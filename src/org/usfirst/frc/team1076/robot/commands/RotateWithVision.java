@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1076.robot.commands;
 
-import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
 import org.usfirst.frc.team1076.robot.vision.VisionData;
@@ -16,13 +15,10 @@ public class RotateWithVision extends Command {
     public double timeFactor = 1;
 
     VisionReceiver receiver;
-    FrontBackMotors frontBack;
     LeftRightMotors leftRight;
     
-    public RotateWithVision(FrontBackMotors frontBack, LeftRightMotors leftRight, VisionReceiver receiver) {
-        requires(frontBack);
+    public RotateWithVision(LeftRightMotors leftRight, VisionReceiver receiver) {
         requires(leftRight);
-        this.frontBack = frontBack;
         this.leftRight = leftRight;
         this.receiver = receiver;
     }
@@ -42,9 +38,9 @@ public class RotateWithVision extends Command {
         }
 
         if (heading > 0) {
-            new RotateCommand(leftRight, frontBack, time, speed).start();
+            new RotateCommand(leftRight, time, speed).start();
         } else if (heading < 0) {
-            new RotateCommand(leftRight, frontBack, time, -speed).start();
+            new RotateCommand(leftRight, time, -speed).start();
         }
     }
 

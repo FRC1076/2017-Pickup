@@ -2,7 +2,6 @@ package org.usfirst.frc.team1076.robot.commands;
 
 import org.usfirst.frc.team1076.robot.Gamepad;
 import org.usfirst.frc.team1076.robot.Gamepad.GamepadAxis;
-import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,15 +13,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class TeleopCommand extends Command {
 
 	double maxSpeed = 0.5;
-	FrontBackMotors frontBack;
 	LeftRightMotors leftRight;
 	Gamepad gamepad;
 	
-    public TeleopCommand(Gamepad gamepad, FrontBackMotors frontBack , LeftRightMotors leftRight ) {
-         requires(frontBack);
+    public TeleopCommand(Gamepad gamepad, LeftRightMotors leftRight ) {
          requires(leftRight);
          this.gamepad = gamepad;
-         this.frontBack = frontBack;
          this.leftRight = leftRight;
     }
 
@@ -61,8 +57,6 @@ public class TeleopCommand extends Command {
     	// is 0.5, then we'll get 2.0 and divide by 2.0.
     	final double norm = selectMaxAbs(new double[] {1/maxSpeed, front, back, left, right});
     	
-    	frontBack.setFrontSpeed(-front / norm);
-    	frontBack.setBackSpeed(-back / norm);
     	leftRight.setLeftSpeed(-left / norm);
     	leftRight.setRightSpeed(-right / norm);
     }
