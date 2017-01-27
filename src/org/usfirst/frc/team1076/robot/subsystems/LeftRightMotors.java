@@ -1,14 +1,13 @@
 package org.usfirst.frc.team1076.robot.subsystems;
 
+import org.strongback.command.Requirable;
 import org.strongback.components.Motor;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * This subsystem represents the motors of the robot.
  * Note that this class assumes that all motors are forward facing.
  */
-public class LeftRightMotors extends Subsystem {
+public class LeftRightMotors implements Requirable {
     
 	public double leftFactor = 1.0;
 	public double rightFactor = 1.0;

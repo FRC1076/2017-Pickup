@@ -4,13 +4,13 @@ package org.usfirst.frc.team1076.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.SocketException;
 
 import org.strongback.Strongback;
+import org.strongback.command.Command;
 import org.strongback.components.Motor;
 import org.strongback.drive.TankDrive;
 import org.strongback.hardware.Hardware;
@@ -122,7 +122,7 @@ public class Robot extends IterativeRobot {
 		} */
     	
     	// schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        if (autonomousCommand != null) Strongback.submit(autonomousCommand);
     }
 
     /**
@@ -138,9 +138,8 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
     	Strongback.logger().info("I LIVE!");
-
+    	Strongback.submit(teleopCommand);
         if (autonomousCommand != null) autonomousCommand.cancel();
-        teleopCommand.start();
     }
 
     /**
