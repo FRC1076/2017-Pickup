@@ -1,9 +1,7 @@
 package org.usfirst.frc.team1076.robot.commands;
 
-import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
+import org.strongback.command.Command;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
-
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
@@ -11,7 +9,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class RotateCommand extends Command {
 
 	LeftRightMotors leftRight;
-	FrontBackMotors frontBack;
 	double targetTime;
 	double time;
 	double speed;
@@ -23,33 +20,25 @@ public class RotateCommand extends Command {
 	 * @param targetTime measured in seconds.
 	 * @param speed in the range of -1 to 1. Positive numbers rotate clockwise, negative numbers rotate counterclockwise.
 	 */
-    public RotateCommand(LeftRightMotors leftRight, FrontBackMotors frontBack, double targetTime, double speed) {
-    	requires(leftRight);
-    	requires(frontBack);
+    public RotateCommand(LeftRightMotors leftRight, double targetTime, double speed) {
+    	super(leftRight);
     	this.leftRight = leftRight;
-    	this.frontBack = frontBack;
     	this.targetTime = targetTime;
     	this.speed = speed;
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
+    public void initialize() {
     	this.time = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    public boolean execute() {
     	time += 1/50.0;
     	
-    	final double width = 23;
-    	final double height = 14.5;
-    	final double frontBackSpeed = height / width;
-    	final double leftRightSpeed = 1;
-    	
-    	frontBack.setFrontSpeed(speed * frontBackSpeed);
-    	frontBack.setBackSpeed(-speed * frontBackSpeed);
-    	leftRight.setLeftSpeed(speed * leftRightSpeed);
-    	leftRight.setRightSpeed(-speed * leftRightSpeed);
+    	leftRight.setLeftSpeed(speed);
+    	leftRight.setRightSpeed(-speed);
+    	return isFinished();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -58,14 +47,13 @@ public class RotateCommand extends Command {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
+    public void end() {
     	leftRight.stop();
-    	frontBack.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() {
+    public void interrupted() {
     	end();
     }
 }
