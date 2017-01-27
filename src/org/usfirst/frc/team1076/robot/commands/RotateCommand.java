@@ -36,13 +36,8 @@ public class RotateCommand extends Command {
     public boolean execute() {
     	time += 1/50.0;
     	
-    	final double width = 23;
-    	final double height = 14.5;
-    	final double frontBackSpeed = height / width;
-    	final double leftRightSpeed = 1;
-    	
-    	leftRight.setLeftSpeed(speed * leftRightSpeed);
-    	leftRight.setRightSpeed(-speed * leftRightSpeed);
+    	leftRight.setLeftSpeed(speed);
+    	leftRight.setRightSpeed(-speed);
     	return isFinished();
     }
 
