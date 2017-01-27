@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1076.robot.commands;
 
-import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -11,7 +10,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class RotateCommand extends Command {
 
 	LeftRightMotors leftRight;
-	FrontBackMotors frontBack;
 	double targetTime;
 	double time;
 	double speed;
@@ -23,11 +21,9 @@ public class RotateCommand extends Command {
 	 * @param targetTime measured in seconds.
 	 * @param speed in the range of -1 to 1. Positive numbers rotate clockwise, negative numbers rotate counterclockwise.
 	 */
-    public RotateCommand(LeftRightMotors leftRight, FrontBackMotors frontBack, double targetTime, double speed) {
+    public RotateCommand(LeftRightMotors leftRight, double targetTime, double speed) {
     	requires(leftRight);
-    	requires(frontBack);
     	this.leftRight = leftRight;
-    	this.frontBack = frontBack;
     	this.targetTime = targetTime;
     	this.speed = speed;
     }
@@ -46,8 +42,6 @@ public class RotateCommand extends Command {
     	final double frontBackSpeed = height / width;
     	final double leftRightSpeed = 1;
     	
-    	frontBack.setFrontSpeed(speed * frontBackSpeed);
-    	frontBack.setBackSpeed(-speed * frontBackSpeed);
     	leftRight.setLeftSpeed(speed * leftRightSpeed);
     	leftRight.setRightSpeed(-speed * leftRightSpeed);
     }
@@ -60,7 +54,6 @@ public class RotateCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	leftRight.stop();
-    	frontBack.stop();
     }
 
     // Called when another command which requires one or more of the same

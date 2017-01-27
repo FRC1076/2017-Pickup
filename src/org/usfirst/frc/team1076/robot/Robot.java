@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
         Strongback.start();
-    	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, receiver);
+    	RotateWithVision rotate = new RotateWithVision(leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
     	autonomousCommand = rotate;
 //        autonomousCommand = new DriveForwardBackward(leftRight,
