@@ -2,7 +2,7 @@ package org.usfirst.frc.team1076.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class Gamepad {
+public class Gamepad implements IGamepad {
 	public enum GamepadButton {
 		A(1),
 		B(2),

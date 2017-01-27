@@ -1,10 +1,9 @@
 package org.usfirst.frc.team1076.robot.commands;
 
-import org.usfirst.frc.team1076.robot.Gamepad;
+import org.strongback.command.Command;
 import org.usfirst.frc.team1076.robot.Gamepad.GamepadAxis;
+import org.usfirst.frc.team1076.robot.IGamepad;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
-
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * Controls the robot using a joy stick controller.
@@ -14,20 +13,16 @@ public class TeleopCommand extends Command {
 
 	double maxSpeed = 0.5;
 	LeftRightMotors leftRight;
-	Gamepad gamepad;
+	IGamepad gamepad;
 	
-    public TeleopCommand(Gamepad gamepad, LeftRightMotors leftRight ) {
-         requires(leftRight);
+    public TeleopCommand(IGamepad gamepad, LeftRightMotors leftRight ) {
+         super(leftRight); //Require the motors
          this.gamepad = gamepad;
          this.leftRight = leftRight;
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    }
-
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {    	
+    public boolean execute() {    	
     	final double forward = gamepad.getAxis(GamepadAxis.RightY);
     	final double rotate = gamepad.getAxis(GamepadAxis.LeftX);
 
@@ -47,6 +42,8 @@ public class TeleopCommand extends Command {
     	
     	leftRight.setLeftSpeed(left / norm);
     	leftRight.setRightSpeed(right / norm);
+    	
+    	return isFinished();
     }
     
     private double selectMaxAbs(double[] items) {
@@ -61,15 +58,5 @@ public class TeleopCommand extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;
-    }
-
-    // Called once after isFinished returns true
-    protected void end() {
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    	end();
     }
 }
