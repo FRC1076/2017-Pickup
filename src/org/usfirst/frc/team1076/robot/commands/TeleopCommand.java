@@ -11,7 +11,7 @@ import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
  */
 public class TeleopCommand extends Command {
 
-	double maxSpeed = 0.5;
+	double maxSpeed = 1.0;
 	LeftRightMotors leftRight;
 	IGamepad gamepad;
 	
@@ -27,9 +27,7 @@ public class TeleopCommand extends Command {
     	final double rotate = gamepad.getAxis(GamepadAxis.LeftX);
 
     	// To rotate counterclockwise, we want the following modification:
-    	//   <
-    	//    
-    	//   >
+    	// V   ^
     	// Which means that left is decreased, and right is increased.
     	final double left = forward + rotate;
     	final double right = forward - rotate;
