@@ -24,9 +24,6 @@ import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
 
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -73,11 +70,11 @@ public class Robot extends IterativeRobot {
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
         compressor.start();
-        SmartDashboard.putNumber("Speed", DRIVE_SPEED_DEFAULT);
-        SmartDashboard.putNumber("Time", DRIVE_TIME_DEFAULT);
-        SmartDashboard.putNumber("Left Factor", LEFT_FACTOR_DEFAULT);
-        SmartDashboard.putNumber("Time Factor", TIME_FACTOR_DEFAULT);
-        SmartDashboard.putNumber("Turn Speed", TURN_SPEED_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Speed", DRIVE_SPEED_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Time", DRIVE_TIME_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Left Factor", LEFT_FACTOR_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Time Factor", TIME_FACTOR_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Turn Speed", TURN_SPEED_DEFAULT);
         
         try {
             visionReceiver = new VisionReceiver(IP, VISION_PORT);
@@ -111,7 +108,7 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
+	 * using the dashboard. The sendable chooser code works with the Java SmarterDashboard. If you prefer the LabVIEW
 	 * Dashboard, remove all of the chooser code and uncomment the getString code to get the auto name from the text box
 	 * below the Gyro
 	 *
@@ -119,18 +116,18 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", LEFT_FACTOR_DEFAULT);
-    	double speed = SmartDashboard.getNumber("Speed", DRIVE_SPEED_DEFAULT);
-    	double time = SmartDashboard.getNumber("Time", DRIVE_TIME_DEFAULT);
-    	double turnFactor = SmartDashboard.getNumber("Time Factor", TIME_FACTOR_DEFAULT);
-    	double turnSpeed = SmartDashboard.getNumber("Turn Speed", TURN_SPEED_DEFAULT);
+    	leftRight.leftFactor = SmarterDashboard.getNumber("Left Factor", LEFT_FACTOR_DEFAULT);
+    	double speed = SmarterDashboard.getNumber("Speed", DRIVE_SPEED_DEFAULT);
+    	double time = SmarterDashboard.getNumber("Time", DRIVE_TIME_DEFAULT);
+    	double turnFactor = SmarterDashboard.getNumber("Time Factor", TIME_FACTOR_DEFAULT);
+    	double turnSpeed = SmarterDashboard.getNumber("Turn Speed", TURN_SPEED_DEFAULT);
     	autonomousCommand = new AutoCommandGroup(frontBack, leftRight, visionReceiver,
     			speed, time, turnFactor, turnSpeed);
     	CancelCommand cancel = new CancelCommand(new Command[] { autonomousCommand });
     	sonarTrigger = new SonarTrigger(10, sonarReceiver, cancel);
     	sonarTrigger.start();
     	
-		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
+		/* String autoSelected = SmarterDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
 		case "My Auto":
 			autonomousCommand = new MyAutoCommand();
