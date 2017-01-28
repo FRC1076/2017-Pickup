@@ -67,11 +67,11 @@ public class Robot extends IterativeRobot {
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
         compressor.start();
-        SmarterDashboard.defaultNumber("Speed", DRIVE_SPEED_DEFAULT);
-        SmarterDashboard.defaultNumber("Time", DRIVE_TIME_DEFAULT);
-        SmarterDashboard.defaultNumber("Left Factor", LEFT_FACTOR_DEFAULT);
-        SmarterDashboard.defaultNumber("Time Factor", TIME_FACTOR_DEFAULT);
-        SmarterDashboard.defaultNumber("Turn Speed", TURN_SPEED_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Speed", DRIVE_SPEED_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Time", DRIVE_TIME_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Left Factor", LEFT_FACTOR_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Time Factor", TIME_FACTOR_DEFAULT);
+        SmarterDashboard.putDefaultNumber("Turn Speed", TURN_SPEED_DEFAULT);
         
         try {
             visionReceiver = new VisionReceiver(IP, VISION_PORT);
