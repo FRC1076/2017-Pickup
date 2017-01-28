@@ -56,6 +56,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        Strongback.start();
+        
         door = new DoorPneumatic(new Solenoid(0));
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
@@ -101,7 +103,6 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
     	leftRight.rightFactor = SmartDashboard.getNumber("Right Factor", 1);
-        Strongback.start();
     	RotateWithVision rotate = new RotateWithVision(leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
     	autonomousCommand = rotate;
