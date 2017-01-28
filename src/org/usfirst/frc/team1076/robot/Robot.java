@@ -2,21 +2,26 @@
 package org.usfirst.frc.team1076.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.SocketException;
 
+import org.strongback.Strongback;
+import org.strongback.command.Command;
+import org.strongback.components.Motor;
+import org.strongback.drive.TankDrive;
+import org.strongback.hardware.Hardware;
+import org.usfirst.frc.team1076.robot.Gamepad.GamepadAxis;
 import org.usfirst.frc.team1076.robot.commands.RotateWithVision;
 import org.usfirst.frc.team1076.robot.subsystems.DoorPneumatic;
 import org.usfirst.frc.team1076.robot.commands.TeleopCommand;
-import org.usfirst.frc.team1076.robot.subsystems.FrontBackMotors;
 import org.usfirst.frc.team1076.robot.subsystems.LeftRightMotors;
 import org.usfirst.frc.team1076.robot.vision.VisionReceiver;
+
+import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,14 +37,11 @@ public class Robot extends IterativeRobot {
 
 	public static OI oi;
 	Gamepad gamepad = new Gamepad(0);
-	CANTalon leftMotor = new CANTalon(2);
-	CANTalon rightMotor = new CANTalon(0);
-	CANTalon frontMotor = new CANTalon(3);
-	CANTalon backMotor = new CANTalon(1);
-	LeftRightMotors leftRight = new LeftRightMotors(leftMotor, rightMotor);
-	FrontBackMotors frontBack = new FrontBackMotors(frontMotor, backMotor);
-	TeleopCommand teleopCommand = new TeleopCommand(gamepad, frontBack, leftRight);
-
+	Motor left = Hardware.Motors.talonSRX(0).invert(); // This motor is placed backwards on the robot
+	Motor right = Hardware.Motors.talonSRX(1);
+	LeftRightMotors leftRight = new LeftRightMotors(left, right);
+	TankDrive tank = new TankDrive(left, right);
+	TeleopCommand teleopCommand = new TeleopCommand(gamepad, leftRight);
     Command autonomousCommand;
     SendableChooser chooser;
     Compressor compressor = new Compressor(0);
@@ -54,6 +56,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        Strongback.start();
+        
         door = new DoorPneumatic(new Solenoid(0));
 		oi = new OI(door);
 		gamepad = new Gamepad(0);
@@ -64,6 +68,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Speed", 0.5);
         SmartDashboard.putNumber("Time", 4);
         SmartDashboard.putNumber("Left Factor", 1);
+        SmartDashboard.putNumber("Right Factor", 1);
         SmartDashboard.putNumber("Vision Time Factor", 1);
         
         try {
@@ -79,7 +84,8 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
      */
     public void disabledInit() {
-
+        leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
+        leftRight.rightFactor = SmartDashboard.getNumber("Right Factor", 1);
     }
 	
 	public void disabledPeriodic() {
@@ -96,8 +102,7 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
-    	RotateWithVision rotate = new RotateWithVision(frontBack, leftRight, receiver);
+    	RotateWithVision rotate = new RotateWithVision(leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
     	autonomousCommand = rotate;
 //        autonomousCommand = new DriveForwardBackward(leftRight,
@@ -117,7 +122,7 @@ public class Robot extends IterativeRobot {
 		} */
     	
     	// schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        if (autonomousCommand != null) Strongback.submit(autonomousCommand);
     }
 
     /**
@@ -132,14 +137,15 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	Strongback.logger().info("I LIVE!");
+    	Strongback.submit(teleopCommand);
         if (autonomousCommand != null) autonomousCommand.cancel();
-        teleopCommand.start();
     }
 
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
+    public void teleopPeriodic() { 
         Scheduler.getInstance().run();
     }
     

@@ -1,17 +1,18 @@
 package org.usfirst.frc.team1076.robot.subsystems;
 
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import org.strongback.command.Requirable;
+import org.strongback.components.Motor;
 
 /**
- * This subsystem represents the motors of the robot, the motor at the front and the
- * motor at the back.
+ * This subsystem represents the motors of the robot.
+ * Note that this class assumes that all motors are forward facing.
  */
-public class LeftRightMotors extends Subsystem {
+public class LeftRightMotors implements Requirable {
     
 	public double leftFactor = 1.0;
-	SpeedController leftMotor;
-	SpeedController rightMotor;
+	public double rightFactor = 1.0;
+	Motor leftMotor;
+	Motor rightMotor;
 	
 	/**
 	 * Constructs on instance of LeftRightMotors, passing it two motor controllers
@@ -19,9 +20,9 @@ public class LeftRightMotors extends Subsystem {
 	 * @param leftMotor
 	 * @param rightMotor
 	 */
-	public LeftRightMotors(SpeedController leftMotor, SpeedController rightMotor) {
-		this.leftMotor = leftMotor;
-		this.rightMotor = rightMotor;
+	public LeftRightMotors(Motor left, Motor right) {
+		this.leftMotor = left;
+		this.rightMotor = right;
 	}
 
 	/**
@@ -29,8 +30,7 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setLeftSpeed(double speed) {
-		// This motor is backwards
-		this.leftMotor.set(-speed * leftFactor);
+		this.leftMotor.setSpeed(speed * leftFactor);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class LeftRightMotors extends Subsystem {
 	 * @param speed in the range -1 to 1 inclusive.
 	 */
 	public void setRightSpeed(double speed) {
-		this.rightMotor.set(speed);
+		this.rightMotor.setSpeed(speed * rightFactor);
 	}
 	
 	/**
