@@ -33,7 +33,7 @@ public class TeleopCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	final double x = gamepad.getAxis(GamepadAxis.LeftX);
-    	final double y = gamepad.getAxis(GamepadAxis.LeftY);
+    	final double y = -gamepad.getAxis(GamepadAxis.LeftY);
     	// Counterclockwise ends up positive.
     	final double rot = gamepad.getAxis(GamepadAxis.RightX);
     	
@@ -44,16 +44,16 @@ public class TeleopCommand extends Command {
     	// move at a speed proportional to their radius.
     	final double radiusScale = 14.5 / 23;
 
-    	// To rotate counterclockwise, we want the following modification:
-    	//   <
-    	// v   ^
+    	// To rotate clockwise, we want the following modification:
     	//   >
-    	// Which means that frontSpeed should be decreased, back increased,
-    	// left decreased, and right increased.
-    	final double front = x - rot * radiusScale;
-    	final double back = x + rot * radiusScale;
-    	final double left = y - rot;
-    	final double right = y + rot;
+    	// ^   v
+    	//   <
+    	// Which means that frontSpeed should be increased, back decreased,
+    	// left increased, and right decreased.
+    	final double front = x + rot * radiusScale;
+    	final double back = x - rot * radiusScale;
+    	final double left = y + rot;
+    	final double right = y - rot;
     	
     	// We don't want any motor to run faster than unit speed, so if anything
     	// is larger than the max speed we'll scale them down.
@@ -61,10 +61,10 @@ public class TeleopCommand extends Command {
     	// is 0.5, then we'll get 2.0 and divide by 2.0.
     	final double norm = selectMaxAbs(new double[] {1/maxSpeed, front, back, left, right});
     	
-    	frontBack.setFrontSpeed(-front / norm);
-    	frontBack.setBackSpeed(-back / norm);
-    	leftRight.setLeftSpeed(-left / norm);
-    	leftRight.setRightSpeed(-right / norm);
+    	frontBack.setFrontSpeed(front / norm);
+    	frontBack.setBackSpeed(back / norm);
+    	leftRight.setLeftSpeed(left / norm);
+    	leftRight.setRightSpeed(right / norm);
     }
     
     private double selectMaxAbs(double[] items) {
