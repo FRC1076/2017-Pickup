@@ -84,7 +84,8 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
      */
     public void disabledInit() {
-
+        leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
+        leftRight.rightFactor = SmartDashboard.getNumber("Right Factor", 1);
     }
 	
 	public void disabledPeriodic() {
@@ -101,8 +102,6 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-    	leftRight.leftFactor = SmartDashboard.getNumber("Left Factor", 1);
-    	leftRight.rightFactor = SmartDashboard.getNumber("Right Factor", 1);
     	RotateWithVision rotate = new RotateWithVision(leftRight, receiver);
     	rotate.timeFactor = SmartDashboard.getNumber("Vision Time Factor", 1);
     	autonomousCommand = rotate;
