@@ -64,7 +64,8 @@ public class VisionData {
             }
             heading = json.getInt("heading");
             range = json.getDouble("range");
-        } catch (JSONException e) { 
+        } catch (JSONException e) {
+        	errorCount += 1;
             // Malformed JSON packet, assume no useful data
         }
     }
