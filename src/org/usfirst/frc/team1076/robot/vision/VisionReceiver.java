@@ -36,11 +36,17 @@ public class VisionReceiver {
 	            return;
 	        }
 	        
+	        boolean foundPacket = false;
 	        while (true) {
 	            try {
 	                socket.receive(packet);
+	                System.out.println("Packet from " + packet.getAddress());
+	                foundPacket = true;
 	            } catch (SocketTimeoutException e) {
 	                // Exit once we have received all the packets.
+	            	if (!foundPacket) {
+	            		this.data.errorCount += 1;
+	            	}
 	                return;
 	            } catch (IOException e) {
 	                e.printStackTrace();
